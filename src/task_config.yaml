@@ -1,0 +1,13 @@
+task:
+  name: Code Freeze
+  slug: code-freeze
+  summary: Block merges during Code Freeze windows
+  description: |
+    ## Features
+    * Block merges during Code Freeze windows
+  subscribed_events:
+    - pull_request.edited
+    - pull_request.opened
+    - pull_request.reopened
+    - pull_request.synchronize
+    - check_run.requested_action
