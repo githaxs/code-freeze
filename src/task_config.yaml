@@ -1,6 +1,7 @@
 task:
   name: Code Freeze
   slug: code-freeze
+  type: meta
   summary: Block merges during Code Freeze windows
   description: |
     ## Features

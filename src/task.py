@@ -27,7 +27,7 @@ class Task(BaseTask):
 
     def _requested_action(self, github_body) -> bool:
         if github_body.get("requested_action").get("identifier") == "override":
-            self.pass_text = "%s has overridden the original result" % github_body.get(
+            self.pass_text = "@%s has overridden the original result" % github_body.get(
                 "sender"
             ).get("login")
             return True
