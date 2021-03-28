@@ -38,6 +38,7 @@ code-freeze:
 code-freeze:
   repo_settings:
     block_times:
+    # Block merges on Saturday and Sunday
       - "* * * * 6,0"
 ```
 
