@@ -1,5 +1,6 @@
 import cronex
 import time
+import datetime
 
 from base_task import BaseTask
 
@@ -43,7 +44,7 @@ class Task(BaseTask):
         return "Cannot deploy during Code Freeze."
 
     def _get_fail_text(self) -> str:
-        return "The current time is: %s\n\nCode Freeze Settings are: %s" % (self.current_time, self.settings.get('block_times'))
+        return "The current time is: %s\n\nCode Freeze Settings are: %s" % (datetime.datetime(*self.current_time).strftime('%H:%M on %b %d %Y'), self.settings.get('block_times'))
 
     def _get_pass_summary(self) -> str:
         return ":+1:"
