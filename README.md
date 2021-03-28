@@ -29,7 +29,7 @@ code-freeze:
 ### Configuration
 |parameter|description|required|default|
 |---|---|---|---|
-|block_times| A **list** of times when pull requests should not be merged. The times follow standard CRON syntax and can be test at [crontab.pro](https://crontab.pro/). | no | 0 |
+|block_times| A **list** of times when pull requests should not be merged. The times follow standard CRON syntax and can be test at [crontab.pro](https://crontab.pro/). See `src/test_task.py` for example configurations and tests. | no | 0 |
 
 ### Example Configuration
 ```yaml

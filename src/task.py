@@ -1,7 +1,7 @@
-import cronex
-import time
 import datetime
+import time
 
+import cronex
 from base_task import BaseTask
 
 
@@ -11,10 +11,10 @@ class Task(BaseTask):
     """
 
     # current_time is only passed in for testing purposes
-    def _execute(self, github_body, current_time = None) -> bool:
+    def _execute(self, github_body, current_time=None) -> bool:
         self.pass_text = ""
 
-        for block_time in self.settings.get('block_times', []):
+        for block_time in self.settings.get("block_times", []):
             cron_expression = cronex.CronExpression(block_time)
 
             if current_time is None:
@@ -44,7 +44,10 @@ class Task(BaseTask):
         return "Cannot deploy during Code Freeze."
 
     def _get_fail_text(self) -> str:
-        return "The current time is: %s\n\nCode Freeze Settings are: %s" % (datetime.datetime(*self.current_time).strftime('%H:%M on %b %d %Y'), self.settings.get('block_times'))
+        return "The current time is: {}\n\nCode Freeze Settings are: {}".format(
+            datetime.datetime(*self.current_time).strftime("%H:%M on %b %d %Y"),
+            self.settings.get("block_times"),
+        )
 
     def _get_pass_summary(self) -> str:
         return ":+1:"
