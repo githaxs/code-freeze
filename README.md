@@ -2,7 +2,7 @@
 
 > Block merges during configurable code freezes
 
-### Global Installation and Settings
+### Installation
 To Install globally:
 
 ```yaml
@@ -26,14 +26,22 @@ code-freeze:
     - website
 ```
 
-### Local Installation and Settings
+### Configuration
+|parameter|description|required|default|
+|---|---|---|---|
+|block_times| A **list** of times when pull requests should not be merged. The times follow standard CRON syntax and can be test at [crontab.pro](https://crontab.pro/). | no | 0 |
 
-To configure repo specific settings:
+### Example Configuration
 ```yaml
-# api-microservice/ghx.yml
+# <repo name>/ghx.yml
 
 code-freeze:
   repo_settings:
     block_times:
       - "* * * * 6,0"
 ```
+
+### Actions
+|name|description|
+|---|---|
+|override| Manually override a failing check. The task will post a comment on GitHub indicating which user has overridden the result.|
