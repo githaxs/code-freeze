@@ -2,19 +2,46 @@ import datetime
 import time
 
 import cronex
-from base_task import BaseTask
+from task_interfaces import MetaTaskInterface
 
 
-class Task(BaseTask):
+class Task(MetaTaskInterface):
     """
     Verifies the Title of a Pull Request matches a provided regex.
     """
 
-    # current_time is only passed in for testing purposes
-    def _execute(self, github_body, current_time=None) -> bool:
-        self.pass_text = ""
+    name = "Code Freeze"
+    slug = "code-freeze"
+    pass_text = ""
+    fail_summary = "Cannot deploy during Code Freeze."
+    _pass_summary = ""
+    _actions = [
+        {
+            "label": "Hotfix",
+            "identifier": "hotfix",
+            "description": "Allow deployment of hotfix.",
+        }
+    ]
 
-        for block_time in self.settings.get("block_times", []):
+    # current_time is only passed in for testing purposes
+    def execute(self, github_body, settings, current_time=None) -> bool:
+        self.settings = settings
+
+        # A manual override has been requested
+        if (
+            github_body.get("githaxs", {}).get("full_event")
+            == "check_run.requested_action"
+            and github_body.get("requested_action", {}).get("identifier", "")
+            == "hotfix"
+        ):
+            self._actions = None
+            self._pass_summary = (
+                "@%s has overridden the original result"
+                % github_body.get("sender").get("login")
+            )
+            return True
+
+        for block_time in settings.get("block_times", []):
             cron_expression = cronex.CronExpression(block_time)
 
             if current_time is None:
@@ -26,40 +53,25 @@ class Task(BaseTask):
 
         return True
 
-    def _requested_action(self, github_body) -> bool:
-        if github_body.get("requested_action").get("identifier") == "override":
-            self.pass_text = "@%s has overridden the original result" % github_body.get(
-                "sender"
-            ).get("login")
-            return True
-        return False
-
-    def _get_task_name(self):
-        return "Code Freeze"
-
-    def _get_task_slug(self) -> str:
-        return "code-freeze"
-
-    def _get_fail_summary(self) -> str:
-        return "Cannot deploy during Code Freeze."
-
-    def _get_fail_text(self) -> str:
+    @property
+    def fail_text(self) -> str:
         return "The current time is: {}\n\nCode Freeze Settings are: {}".format(
             datetime.datetime(*self.current_time).strftime("%H:%M on %b %d %Y"),
             self.settings.get("block_times"),
         )
 
-    def _get_pass_summary(self) -> str:
-        return ":+1:"
+    @property
+    def pass_summary(self) -> str:
+        return self._pass_summary
 
-    def _get_pass_text(self) -> str:
-        return self.pass_text
+    @pass_summary.setter
+    def pass_summary(self, pass_summary):
+        self._pass_summary = pass_summary
 
-    def _get_actions(self):
-        return [
-            {
-                "label": "Override",
-                "identifier": "override",
-                "description": "Allow exception for PR Too Big",
-            }
-        ]
+    @property
+    def actions(self):
+        return self._actions
+
+    @actions.setter
+    def actions(self, actions):
+        self._actions = actions

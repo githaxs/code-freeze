@@ -36,8 +36,23 @@ test_cases = [
 
 
 def test():
-    task = Task(None)
+    task = Task()
     for test_case in test_cases:
-        task.settings = test_case["settings"]
+        settings = test_case["settings"]
 
-        assert task._execute(None, test_case["current_time"]) is test_case["expected"]
+        assert (
+            task.execute({}, settings, test_case["current_time"])
+            is test_case["expected"]
+        )
+
+
+def test_requested_action():
+    task = Task()
+
+    event = {
+        "githaxs": {"full_event": "check_run.requested_action"},
+        "requested_action": {"identifier": "hotfix"},
+        "sender": {"login": "foo"},
+    }
+
+    assert task.execute(event, None, None) is True
