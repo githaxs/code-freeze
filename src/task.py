@@ -12,9 +12,9 @@ class Task(MetaTaskInterface):
 
     name = "Code Freeze"
     slug = "code-freeze"
-    pass_summary = ""
+    pass_text = ""
     fail_summary = "Cannot deploy during Code Freeze."
-    _pass_text = ""
+    _pass_summary = ""
     _actions = [
         {
             "label": "Hotfix",
@@ -35,9 +35,10 @@ class Task(MetaTaskInterface):
             == "hotfix"
         ):
             self._actions = None
-            self._pass_text = "%s has overridden the original result" % github_body.get(
-                "sender"
-            ).get("login")
+            self._pass_summary = (
+                "@%s has overridden the original result"
+                % github_body.get("sender").get("login")
+            )
             return True
 
         for block_time in settings.get("block_times", []):
@@ -60,12 +61,12 @@ class Task(MetaTaskInterface):
         )
 
     @property
-    def pass_text(self) -> str:
-        return self._pass_text
+    def pass_summary(self) -> str:
+        return self._pass_summary
 
-    @pass_text.setter
-    def pass_text(self, pass_text):
-        self._pass_text = pass_text
+    @pass_summary.setter
+    def pass_summary(self, pass_summary):
+        self._pass_summary = pass_summary
 
     @property
     def actions(self):
