@@ -36,8 +36,11 @@ test_cases = [
 
 
 def test():
-    task = Task(None)
+    task = Task()
     for test_case in test_cases:
-        task.settings = test_case["settings"]
+        settings = test_case["settings"]
 
-        assert task._execute(None, test_case["current_time"]) is test_case["expected"]
+        assert (
+            task.execute({}, settings, test_case["current_time"])
+            is test_case["expected"]
+        )
