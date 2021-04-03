@@ -44,3 +44,15 @@ def test():
             task.execute({}, settings, test_case["current_time"])
             is test_case["expected"]
         )
+
+
+def test_requested_action():
+    task = Task()
+
+    event = {
+        "githaxs": {"full_event": "check_run.requested_action"},
+        "requested_action": {"identifier": "hotfix"},
+        "sender": {"login": "foo"},
+    }
+
+    assert task.execute(event, None, None) is True

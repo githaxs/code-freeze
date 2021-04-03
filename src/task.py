@@ -15,11 +15,11 @@ class Task(MetaTaskInterface):
     pass_summary = ""
     fail_summary = "Cannot deploy during Code Freeze."
     _pass_text = ""
-    actions = [
+    _actions = [
         {
             "label": "Hotfix",
             "identifier": "hotfix",
-            "description": "Allow deployment of hotfix during code freeze.",
+            "description": "Allow deployment of hotfix.",
         }
     ]
 
@@ -34,8 +34,8 @@ class Task(MetaTaskInterface):
             and github_body.get("requested_action", {}).get("identifier", "")
             == "hotfix"
         ):
-            self.actions = None
-            self.pass_text = "%s has overridden the original result" % github_body.get(
+            self._actions = None
+            self._pass_text = "%s has overridden the original result" % github_body.get(
                 "sender"
             ).get("login")
             return True
@@ -62,3 +62,15 @@ class Task(MetaTaskInterface):
     @property
     def pass_text(self) -> str:
         return self._pass_text
+
+    @pass_text.setter
+    def pass_text(self, pass_text):
+        self._pass_text = pass_text
+
+    @property
+    def actions(self):
+        return self._actions
+
+    @actions.setter
+    def actions(self, actions):
+        self._actions = actions
