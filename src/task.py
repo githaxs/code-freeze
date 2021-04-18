@@ -2,7 +2,7 @@ import datetime
 import time
 
 import cronex
-from task_interfaces import MetaTaskInterface
+from task_interfaces import MetaTaskInterface, SubscriptionLevels
 
 
 class Task(MetaTaskInterface):
@@ -15,6 +15,7 @@ class Task(MetaTaskInterface):
     pass_text = ""
     fail_summary = "Cannot deploy during Code Freeze."
     _pass_summary = ""
+    subscription_level = SubscriptionLevels.FREE
     _actions = [
         {
             "label": "Hotfix",
@@ -51,6 +52,7 @@ class Task(MetaTaskInterface):
             if cron_expression.check_trigger(current_time) is True:
                 return False
 
+        self._actions = None
         return True
 
     @property
