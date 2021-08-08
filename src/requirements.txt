@@ -1,4 +1,2 @@
 cronex
-git+https://github_token:x-oauth-basic@github.com/githaxs/base-task.git@v0.0.7
-git+https://github.com/githaxs/task-interfaces@v0.0.2
-sentry-sdk
+git+https://github.com/githaxs/task-interfaces@v0.0.3

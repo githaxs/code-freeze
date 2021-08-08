@@ -2,10 +2,10 @@ import datetime
 import time
 
 import cronex
-from task_interfaces import MetaTaskInterface, SubscriptionLevels
+from task_interfaces import TaskInterface, SubscriptionLevels, TaskTypes
 
 
-class Task(MetaTaskInterface):
+class Task(TaskInterface):
     """
     Verifies the Title of a Pull Request matches a provided regex.
     """
@@ -23,6 +23,7 @@ class Task(MetaTaskInterface):
             "description": "Allow deployment of hotfix.",
         }
     ]
+    type = TaskTypes.WORKFLOW
 
     # current_time is only passed in for testing purposes
     def execute(self, github_body, settings, current_time=None) -> bool:
