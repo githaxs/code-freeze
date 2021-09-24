@@ -1,6 +1,6 @@
 name: Code Freeze
 slug: code-freeze
-type: meta
+type: content
 summary: Block merges during Code Freeze windows
 subscribed_events:
   - pull_request.edited
